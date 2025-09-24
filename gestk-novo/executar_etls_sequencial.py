@@ -61,20 +61,20 @@ class ETLSequencialExecutor:
                 'comando': 'etl_02_cnaes'
             },
             {
-                'numero': '04',
+                'numero': '03',
                 'nome': 'contratos',
                 'descricao': 'Contratos, Pessoas Físicas e Jurídicas',
                 'dependencias': ['01'],
                 'critico': True,
-                'comando': 'etl_04_contratos'
+                'comando': 'etl_03_contratos'
             },
             {
-                'numero': '21',
+                'numero': '04',
                 'nome': 'quadro_societario',
                 'descricao': 'Quadro Societário',
-                'dependencias': ['04'],
+                'dependencias': ['03'],
                 'critico': False,
-                'comando': 'etl_21_quadro_societario'
+                'comando': 'etl_04_quadro_societario'
             },
             
             # ETLs Contábeis
@@ -100,7 +100,7 @@ class ETLSequencialExecutor:
                 'numero': '07',
                 'nome': 'notas_fiscais',
                 'descricao': 'Notas Fiscais (entrada/saída/serviços)',
-                'dependencias': ['04'],
+                'dependencias': ['03'],
                 'critico': False,
                 'comando': 'etl_07_notas_fiscais'
             },
@@ -108,7 +108,7 @@ class ETLSequencialExecutor:
                 'numero': '17',
                 'nome': 'cupons_fiscais',
                 'descricao': 'Cupons Fiscais Eletrônicos',
-                'dependencias': ['04'],
+                'dependencias': ['03'],
                 'critico': False,
                 'comando': 'etl_17_cupons_fiscais'
             },
@@ -118,7 +118,7 @@ class ETLSequencialExecutor:
                 'numero': '08',
                 'nome': 'rh_cargos',
                 'descricao': 'Cargos',
-                'dependencias': ['04'],
+                'dependencias': ['03'],
                 'critico': False,
                 'comando': 'etl_08_rh_cargos'
             },
@@ -126,7 +126,7 @@ class ETLSequencialExecutor:
                 'numero': '09',
                 'nome': 'rh_departamentos',
                 'descricao': 'Departamentos',
-                'dependencias': ['04'],
+                'dependencias': ['03'],
                 'critico': False,
                 'comando': 'etl_09_rh_departamentos'
             },
@@ -134,7 +134,7 @@ class ETLSequencialExecutor:
                 'numero': '10',
                 'nome': 'rh_centros_custo',
                 'descricao': 'Centros de Custo',
-                'dependencias': ['04'],
+                'dependencias': ['03'],
                 'critico': False,
                 'comando': 'etl_10_rh_centros_custo'
             },
@@ -142,7 +142,7 @@ class ETLSequencialExecutor:
                 'numero': '11',
                 'nome': 'rh_funcionarios_vinculos',
                 'descricao': 'Funcionários e Vínculos',
-                'dependencias': ['08', '09', '10'],
+                'dependencias': ['03', '08', '09', '10'],
                 'critico': False,
                 'comando': 'etl_11_rh_funcionarios_vinculos'
             },
@@ -208,7 +208,7 @@ class ETLSequencialExecutor:
                 'numero': '18',
                 'nome': 'usuarios',
                 'descricao': 'Usuários e Configurações',
-                'dependencias': ['04'],
+                'dependencias': ['03'],
                 'critico': False,
                 'comando': 'etl_18_usuarios'
             },

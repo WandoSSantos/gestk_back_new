@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db import connection
-from funcionarios.models import GozoFerias, PeriodoAquisitivoFerias
+from apps.funcionarios.models import GozoFerias, PeriodoAquisitivoFerias
 
 class Command(BaseCommand):
     help = 'Limpa as tabelas de GozoFerias e PeriodoAquisitivoFerias para permitir a recriação de migrações.'

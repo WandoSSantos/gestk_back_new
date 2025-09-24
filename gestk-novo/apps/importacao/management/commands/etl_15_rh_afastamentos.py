@@ -3,7 +3,7 @@ import pyodbc
 from decimal import Decimal
 from itertools import islice
 from django.db import transaction
-from funcionarios.models import VinculoEmpregaticio, Afastamento
+from apps.funcionarios.models import VinculoEmpregaticio, Afastamento
 from ._base import BaseETLCommand
 
 def batch_iterator(iterable, batch_size):

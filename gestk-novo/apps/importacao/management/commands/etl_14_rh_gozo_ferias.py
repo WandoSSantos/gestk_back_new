@@ -2,7 +2,7 @@ import re
 from django.db import transaction
 from tqdm import tqdm
 from ._base import BaseETLCommand
-from funcionarios.models import PeriodoAquisitivoFerias, GozoFerias, Rubrica
+from apps.funcionarios.models import PeriodoAquisitivoFerias, GozoFerias, Rubrica
 from decimal import Decimal
 
 def batch_iterator(iterator, batch_size):

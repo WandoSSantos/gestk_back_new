@@ -1,6 +1,6 @@
 from django.db import transaction
 from ._base import BaseETLCommand
-from cadastros_gerais.models import CNAE
+from apps.cadastros_gerais.models import CNAE
 
 class Command(BaseETLCommand):
     help = 'ETL para extrair e carregar dados de CNAEs do Sybase.'

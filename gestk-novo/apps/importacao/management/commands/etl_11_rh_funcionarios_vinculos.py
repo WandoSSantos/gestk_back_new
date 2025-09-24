@@ -3,8 +3,8 @@ from tqdm import tqdm
 from django.contrib.contenttypes.models import ContentType
 
 from ._base import BaseETLCommand
-from pessoas.models import PessoaJuridica, PessoaFisica
-from funcionarios.models import Cargo, Departamento, CentroCusto, Funcionario, VinculoEmpregaticio
+from apps.pessoas.models import PessoaJuridica, PessoaFisica
+from apps.funcionarios.models import Cargo, Departamento, CentroCusto, Funcionario, VinculoEmpregaticio
 
 def batch_iterator(iterator, batch_size):
     # (Código do batch_iterator)

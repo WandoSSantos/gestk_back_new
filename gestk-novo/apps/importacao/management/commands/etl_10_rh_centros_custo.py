@@ -4,9 +4,9 @@ from tqdm import tqdm
 from django.contrib.contenttypes.models import ContentType
 
 from ._base import BaseETLCommand
-from core.models import Contabilidade
-from pessoas.models import PessoaJuridica, PessoaFisica, Contrato
-from funcionarios.models import CentroCusto
+from apps.core.models import Contabilidade
+from apps.pessoas.models import PessoaJuridica, PessoaFisica, Contrato
+from apps.funcionarios.models import CentroCusto
 
 def batch_iterator(iterator, batch_size):
     batch = []

@@ -1,7 +1,7 @@
 import datetime
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from contabil.models import LancamentoContabil, Partida
+from apps.contabil.models import LancamentoContabil, Partida
 
 class Command(BaseCommand):
     help = 'Remove todos os lançamentos contábeis com data anterior a 2019-01-01.'

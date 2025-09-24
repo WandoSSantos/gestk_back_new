@@ -2,7 +2,7 @@ import re
 from django.db import transaction
 from tqdm import tqdm
 from ._base import BaseETLCommand
-from funcionarios.models import VinculoEmpregaticio, PeriodoAquisitivoFerias
+from apps.funcionarios.models import VinculoEmpregaticio, PeriodoAquisitivoFerias
 
 def batch_iterator(iterator, batch_size):
     """Gera lotes de um iterador."""

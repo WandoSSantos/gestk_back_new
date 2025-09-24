@@ -67,8 +67,8 @@ python executar_etls_sequencial.py --dry-run --etl-inicial 05 --etl-final 10 --b
 1. **ETL 00** - Mapeamento Completo de Empresas ⚠️ **CRÍTICO**
 2. **ETL 01** - Contabilidades (Tenants) ⚠️ **CRÍTICO**
 3. **ETL 02** - CNAEs ⚠️ **CRÍTICO**
-4. **ETL 04** - Contratos, Pessoas Físicas e Jurídicas ⚠️ **CRÍTICO**
-5. **ETL 21** - Quadro Societário
+4. **ETL 03** - Contratos, Pessoas Físicas e Jurídicas ⚠️ **CRÍTICO**
+5. **ETL 04** - Quadro Societário
 
 ### ETLs Contábeis
 6. **ETL 05** - Plano de Contas
@@ -99,11 +99,11 @@ python executar_etls_sequencial.py --dry-run --etl-inicial 05 --etl-final 10 --b
 
 ### Mapa de Dependências
 ```
-ETL 00 (Mapeamento) → ETL 01, 02, 04
-ETL 01 (Contabilidades) → ETL 04, 05, 18
+ETL 00 (Mapeamento) → ETL 01, 02, 03
+ETL 01 (Contabilidades) → ETL 03, 05, 18
 ETL 02 (CNAEs) → Nenhuma dependência
-ETL 04 (Contratos) → ETL 21, 07, 17, 08, 09, 10, 11, 18
-ETL 21 (Quadro Societário) → Nenhuma dependência adicional
+ETL 03 (Contratos) → ETL 04, 07, 17, 08, 09, 10, 11, 18
+ETL 04 (Quadro Societário) → Nenhuma dependência adicional
 ETL 05 (Plano de Contas) → ETL 06
 ETL 08 (Cargos) → ETL 11
 ETL 09 (Departamentos) → ETL 11

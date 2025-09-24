@@ -41,6 +41,22 @@ class PessoaJuridica(models.Model):
     inscricao_estadual = models.CharField(_('Inscrição Estadual'), max_length=20, blank=True, null=True)
     inscricao_municipal = models.CharField(_('Inscrição Municipal'), max_length=20, blank=True, null=True)
     
+    # Regime tributário
+    REGIME_TRIBUTARIO_CHOICES = [
+        ('1', 'Simples Nacional'),
+        ('2', 'Lucro Presumido'),
+        ('3', 'Lucro Real'),
+        ('4', 'MEI - Microempreendedor Individual'),
+    ]
+    regime_tributario = models.CharField(
+        _('Regime Tributário'), 
+        max_length=1, 
+        choices=REGIME_TRIBUTARIO_CHOICES,
+        blank=True, 
+        null=True
+    )
+    simples_nacional = models.BooleanField(_('Simples Nacional'), default=False)
+    
     # Responsável legal
     responsavel_legal = models.CharField(_('Responsável Legal'), max_length=255, blank=True, null=True)
     cpf_responsavel = models.CharField(_('CPF do Responsável'), max_length=14, blank=True, null=True)

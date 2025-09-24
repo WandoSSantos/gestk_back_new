@@ -4,7 +4,7 @@ import time
 from datetime import date, datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from pessoas.models import Contrato, PessoaJuridica, PessoaFisica
+from apps.pessoas.models import Contrato, PessoaJuridica, PessoaFisica
 from functools import lru_cache
 
 class BaseETLCommand(BaseCommand):
@@ -91,7 +91,7 @@ class BaseETLCommand(BaseCommand):
         Retorna:
             dict: {
                 'cnpj_ou_cpf_limpo': [
-                    (data_inicio, data_termino, contabilidade_obj),
+                    (data_inicio, data_termino, contabilidade_obj, contrato_obj),
                     ...
                 ]
             }
@@ -125,7 +125,7 @@ class BaseETLCommand(BaseCommand):
             data_termino = contrato.data_termino if contrato.data_termino else date.max
             
             historical_map[documento_limpo].append(
-                (contrato.data_inicio, data_termino, contrato.contabilidade)
+                (contrato.data_inicio, data_termino, contrato.contabilidade, contrato)
             )
         
         self.stdout.write(self.style.SUCCESS(f'Mapa histórico construído com {len(historical_map)} empresas únicas.'))

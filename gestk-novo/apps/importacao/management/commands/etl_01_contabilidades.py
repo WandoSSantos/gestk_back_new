@@ -1,6 +1,6 @@
 from django.db import transaction
 from ._base import BaseETLCommand
-from core.models import Contabilidade
+from apps.core.models import Contabilidade
 import re
 
 class Command(BaseETLCommand):

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from core.models import Contabilidade
+from apps.core.models import Contabilidade
 import os
 
 class Command(BaseCommand):

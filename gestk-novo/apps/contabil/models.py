@@ -26,6 +26,7 @@ class PlanoContas(models.Model):
 class LancamentoContabil(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contabilidade = models.ForeignKey('core.Contabilidade', on_delete=models.PROTECT, related_name='lancamentos_contabeis')
+    contrato = models.ForeignKey('pessoas.Contrato', on_delete=models.PROTECT, related_name='lancamentos_contabeis', null=True, blank=True)
     numero_lancamento = models.CharField(_('Número do Lançamento'), max_length=50)
     data_lancamento = models.DateField(_('Data do Lançamento'))
     historico = models.TextField(_('Histórico'))

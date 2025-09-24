@@ -32,6 +32,9 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lamb
 
 # Application definition
 
+# Configurar Custom User Model
+AUTH_USER_MODEL = 'core.Usuario'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,19 +45,24 @@ INSTALLED_APPS = [
 
     # Third party apps
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
     'simple_history',
+    'django_extensions',
 
     # Apps locais (SEGUIR ESTA ORDEM)
-    'core.apps.CoreConfig',                          # 1º - Base (Contabilidade, Usuario)
-    'cadastros_gerais.apps.CadastrosGeraisConfig',   # 2º - Cadastros (CNAE)
-    'pessoas.apps.PessoasConfig',                    # 3º - Pessoas (PF, PJ, Parceiro)
-    'contabil.apps.ContabilConfig',                  # 4º - Contabilidade (Plano de Contas, Lançamentos)
-    'contabilidade_fiscal.apps.ContabilidadeFiscalConfig', # 5º - Ligações Fiscais
-    'fiscal.apps.FiscalConfig',                      # 6º - Documentos Fiscais (Notas)
-    'funcionarios.apps.FuncionariosConfig',          # 7º - RH Completo
-    'importacao.apps.ImportacaoConfig',              # 8º - Sistema de ETL
-    'administracao.apps.AdministracaoConfig',        # 9º - Administração (Usuários, Permissões)
+    'apps.core.apps.CoreConfig',                          # 1º - Base (Contabilidade, Usuario)
+    'apps.cadastros_gerais.apps.CadastrosGeraisConfig',   # 2º - Cadastros (CNAE)
+    'apps.pessoas.apps.PessoasConfig',                    # 3º - Pessoas (PF, PJ, Parceiro)
+    'apps.contabil.apps.ContabilConfig',                  # 4º - Contabilidade (Plano de Contas, Lançamentos)
+    'apps.contabilidade_fiscal.apps.ContabilidadeFiscalConfig', # 5º - Ligações Fiscais
+    'apps.fiscal.apps.FiscalConfig',                      # 6º - Documentos Fiscais (Notas)
+    'apps.funcionarios.apps.FuncionariosConfig',          # 7º - RH Completo
+    'apps.importacao.apps.ImportacaoConfig',              # 8º - Sistema de ETL
+    'apps.administracao.apps.AdministracaoConfig',        # 9º - Administração (Usuários, Permissões)
+    'apps.api.apps.ApiConfig',                            # 10º - API REST
+    'apps.api.gestao.apps.GestaoConfig',                  # 11º - Gestão (Endpoints de Análise)
+    'apps.api.dashboards.apps.DashboardsConfig',          # 12º - Dashboards (Endpoints de Análise)
 ]
 
 MIDDLEWARE = [
@@ -114,8 +122,6 @@ SYBASE_CONFIG = {
     'PWD': config('ODBC_PASSWORD', default='externo'),
 }
 
-AUTH_USER_MODEL = 'core.Usuario'
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -168,4 +174,76 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+# =============================================================================
+# CONFIGURAÇÃO JWT (JSON Web Token)
+# =============================================================================
+
+from datetime import timedelta
+
+# Configuração do Simple JWT
+SIMPLE_JWT = {
+    # Tempo de vida dos tokens
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=8),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    
+    # Rotação de tokens
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+    
+    # Algoritmo de assinatura
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+    
+    # Headers de autenticação
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+    
+    # Classes de token
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+    
+    # Claims personalizados
+    'JTI_CLAIM': 'jti',
+    
+    # Tokens deslizantes
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(hours=8),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
+}
+
+# Configuração do REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FormParser',
+    ],
+}
 

@@ -1,7 +1,7 @@
 from django.db import transaction
 from ._base import BaseETLCommand
-from core.models import Contabilidade
-from contabil.models import PlanoContas
+from apps.core.models import Contabilidade
+from apps.contabil.models import PlanoContas
 import re
 from itertools import islice
 import sys

@@ -1,8 +1,8 @@
 from django.db import transaction
 from ._base import BaseETLCommand
-from core.models import Contabilidade
-from contabil.models import PlanoContas, LancamentoContabil, Partida
-from pessoas.models import PessoaJuridica, Contrato
+from apps.core.models import Contabilidade
+from apps.contabil.models import PlanoContas, LancamentoContabil, Partida
+from apps.pessoas.models import PessoaJuridica, Contrato
 from django.contrib.contenttypes.models import ContentType
 from itertools import islice
 import datetime
@@ -184,11 +184,55 @@ class Command(BaseETLCommand):
                             total_sem_mapeamento += 1
                             continue
 
+                        # Verificar se a empresa tem contrato nos últimos 5 anos (2019-2025)
+                        # e se o lançamento está no período de importação (01/01/2019 até presente)
+                        from datetime import date
+                        data_limite_5_anos = date(2019, 1, 1)  # Últimos 5 anos (obrigação legal)
+                        data_limite_importacao = date(2019, 1, 1)  # Período de importação
+                        data_atual = date.today()
+                        
+                        # Verificar se o lançamento está no período de importação
+                        if data_lancamento < data_limite_importacao or data_lancamento > data_atual:
+                            total_sem_mapeamento += 1
+                            continue
+
                         contabilidade = None
-                        for data_inicio, data_termino, contab in contratos_empresa:
-                            if data_inicio and data_termino and data_inicio <= data_lancamento <= data_termino:
-                                contabilidade = contab
-                                break
+                        contrato_correto = None
+                        contrato_valido = False
+                        
+                        for data_inicio, data_termino, contab, contrato in contratos_empresa:
+                            # Verificar se o contrato está nos últimos 5 anos (2019-2025)
+                            # Contrato é válido se começou em 2019 ou depois, ou se terminou em 2019 ou depois
+                            contrato_nos_ultimos_5_anos = (
+                                (data_inicio and data_inicio >= data_limite_5_anos) or
+                                (data_termino and data_termino >= data_limite_5_anos) or
+                                (data_inicio and data_termino and data_inicio <= data_limite_5_anos <= data_termino)
+                            )
+                            
+                            if contrato_nos_ultimos_5_anos:
+                                contrato_valido = True
+                                # Verificar se o lançamento está dentro do período do contrato
+                                if data_inicio and data_termino and data_inicio <= data_lancamento <= data_termino:
+                                    contabilidade = contab
+                                    contrato_correto = contrato
+                                    break
+                        
+                        # Se não encontrou contrato específico para a data, mas tem contrato válido nos últimos 5 anos,
+                        # usar o contrato mais recente
+                        if not contabilidade and contrato_valido:
+                            # Buscar o contrato mais recente dos últimos 5 anos
+                            contratos_validos = [
+                                (data_inicio, data_termino, contab, contrato) 
+                                for data_inicio, data_termino, contab, contrato in contratos_empresa
+                                if (data_inicio and data_inicio >= data_limite_5_anos) or
+                                   (data_termino and data_termino >= data_limite_5_anos) or
+                                   (data_inicio and data_termino and data_inicio <= data_limite_5_anos <= data_termino)
+                            ]
+                            
+                            if contratos_validos:
+                                # Ordenar por data de início (mais recente primeiro)
+                                contratos_validos.sort(key=lambda x: x[0] or date.min, reverse=True)
+                                data_inicio, data_termino, contabilidade, contrato_correto = contratos_validos[0]
                         
                         if not contabilidade:
                             total_sem_mapeamento += 1
@@ -250,6 +294,7 @@ class Command(BaseETLCommand):
                         
                         lancamento, created = LancamentoContabil.objects.update_or_create(
                             contabilidade=contabilidade,
+                            contrato=contrato_correto,
                             numero_lancamento=str(item.get('nume_lan')),
                             defaults={
                                 'data_lancamento': item.get('data_lan'),

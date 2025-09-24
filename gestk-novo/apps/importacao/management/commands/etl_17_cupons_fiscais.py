@@ -3,9 +3,9 @@ from django.db import transaction
 from decimal import Decimal
 from tqdm import tqdm
 from datetime import datetime
-from importacao.management.commands._base import BaseETLCommand
-from pessoas.models import PessoaFisica, PessoaJuridica
-from fiscal.models import NotaFiscal, NotaFiscalItem
+from apps.importacao.management.commands._base import BaseETLCommand
+from apps.pessoas.models import PessoaFisica, PessoaJuridica
+from apps.fiscal.models import NotaFiscal, NotaFiscalItem
 
 
 class Command(BaseETLCommand):

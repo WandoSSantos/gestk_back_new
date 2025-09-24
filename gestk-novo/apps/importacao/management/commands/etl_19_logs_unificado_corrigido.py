@@ -23,9 +23,9 @@ from decimal import Decimal
 import time
 import hashlib
 
-from importacao.management.commands._base import BaseETLCommand
-from administracao.models import Usuario, UsuarioContabilidade
-from pessoas.models import PessoaJuridica
+from apps.importacao.management.commands._base import BaseETLCommand
+from apps.administracao.models import Usuario, UsuarioContabilidade
+from apps.pessoas.models import PessoaJuridica
 
 
 class Command(BaseETLCommand):
@@ -213,7 +213,7 @@ class Command(BaseETLCommand):
                 
                 if not self.dry_run:
                     # Importar modelo normalizado
-                    from administracao.models_etl19_corrigido import LogAtividade
+                    from apps.administracao.models_etl19_corrigido import LogAtividade
                     
                     # Criar ou atualizar log de atividade NORMALIZADO
                     log_atividade, created = LogAtividade.objects.get_or_create(
@@ -312,7 +312,7 @@ class Command(BaseETLCommand):
                 
                 if not self.dry_run:
                     # Importar modelo normalizado
-                    from administracao.models_etl19_corrigido import LogImportacao
+                    from apps.administracao.models_etl19_corrigido import LogImportacao
                     
                     # Criar ou atualizar log de importação NORMALIZADO
                     log_importacao, created = LogImportacao.objects.get_or_create(
@@ -402,7 +402,7 @@ class Command(BaseETLCommand):
                 
                 if not self.dry_run:
                     # Importar modelo normalizado
-                    from administracao.models_etl19_corrigido import LogLancamento
+                    from apps.administracao.models_etl19_corrigido import LogLancamento
                     
                     # Criar ou atualizar log de lançamento NORMALIZADO
                     log_lancamento, created = LogLancamento.objects.get_or_create(
@@ -485,7 +485,7 @@ class Command(BaseETLCommand):
         self.stdout.write('Gerando estatísticas consolidadas...')
         
         # Importar modelos normalizados
-        from administracao.models_etl19_corrigido import LogAtividade, LogImportacao, LogLancamento, EstatisticaUsuario
+        from apps.administracao.models_etl19_corrigido import LogAtividade, LogImportacao, LogLancamento, EstatisticaUsuario
         
         # Agrupar por usuário, empresa e mês
         from django.db.models import Sum, Count
@@ -603,7 +603,7 @@ class Command(BaseETLCommand):
                 stats_consolidadas[key]['lancamentos_manuais'] = stat['total_lancamentos']
         
         # Criar registros de estatísticas NORMALIZADOS
-        from core.models import Contabilidade
+        from apps.core.models import Contabilidade
         
         for key, stats in stats_consolidadas.items():
             try:

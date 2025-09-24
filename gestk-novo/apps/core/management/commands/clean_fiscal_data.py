@@ -8,8 +8,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.WARNING('--- INICIANDO LIMPEZA DE DADOS FISCAIS PARA REATORAÇÃO ---'))
         
         # Importar modelos aqui para evitar problemas de importação circular
-        from fiscal.models import NotaFiscalItem, NotaFiscal
-        from pessoas.models import ParceiroNegocio
+        from apps.fiscal.models import NotaFiscalItem, NotaFiscal
+        from apps.pessoas.models import ParceiroNegocio
 
         try:
             with transaction.atomic():

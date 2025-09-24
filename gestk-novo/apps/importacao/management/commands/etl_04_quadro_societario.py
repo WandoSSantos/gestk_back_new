@@ -1,5 +1,5 @@
 """
-ETL 21 - Quadro Societário das Empresas
+ETL 04 - Quadro Societário das Empresas
 
 Importa informações do quadro societário das empresas incluindo:
 - Sócios (Pessoa Física e Jurídica)
@@ -12,9 +12,9 @@ Aplicação da regra de ouro para mapeamento multitenant via CNPJ.
 
 from django.db import transaction
 from ._base import BaseETLCommand
-from core.models import Contabilidade
-from pessoas.models import PessoaJuridica, PessoaFisica
-from pessoas.models_quadro_societario import QuadroSocietario, CapitalSocial
+from apps.core.models import Contabilidade
+from apps.pessoas.models import PessoaJuridica, PessoaFisica
+from apps.pessoas.models_quadro_societario import QuadroSocietario, CapitalSocial
 from django.contrib.contenttypes.models import ContentType
 import re
 from datetime import date

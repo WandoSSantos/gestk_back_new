@@ -4,9 +4,9 @@ from tqdm import tqdm
 from django.contrib.contenttypes.models import ContentType
 
 from ._base import BaseETLCommand
-from core.models import Contabilidade
-from pessoas.models import PessoaJuridica, PessoaFisica, Contrato
-from funcionarios.models import Rubrica
+from apps.core.models import Contabilidade
+from apps.pessoas.models import PessoaJuridica, PessoaFisica, Contrato
+from apps.funcionarios.models import Rubrica
 
 def batch_iterator(iterator, batch_size):
     """Gera lotes de um iterador."""

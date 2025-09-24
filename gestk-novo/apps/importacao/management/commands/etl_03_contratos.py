@@ -1,13 +1,13 @@
 from django.db import transaction
 from ._base import BaseETLCommand
-from core.models import Contabilidade
-from pessoas.models import PessoaJuridica, PessoaFisica, Contrato
+from apps.core.models import Contabilidade
+from apps.pessoas.models import PessoaJuridica, PessoaFisica, Contrato
 from django.contrib.contenttypes.models import ContentType
 import re
 from datetime import date
 
 class Command(BaseETLCommand):
-    help = 'ETL 04 - Importação de Contratos e Pessoas (Físicas/Jurídicas) com dados específicos'
+    help = 'ETL 03 - Importação de Contratos e Pessoas (Físicas/Jurídicas) com dados específicos'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -58,7 +58,12 @@ class Command(BaseETLCommand):
             ge.codi_emp as id_legado_cliente,
             ge.cgce_emp as documento,
             ge.nome_emp as nome_razao_social,
-            ge.fantasia_emp
+            ge.fantasia_emp,
+            ge.simples_emp,
+            ge.cnae_emp,
+            ge.ramo_emp,
+            ge.rleg_emp,
+            ge.cpf_leg_emp as cpf_responsavel
         FROM 
             BETHADBA.HRCONTRATO AS hc
         INNER JOIN
@@ -66,6 +71,7 @@ class Command(BaseETLCommand):
         INNER JOIN
             BETHADBA.GEEMPRE AS ge ON hvc.i_cliente_fixo = ge.codi_emp
         WHERE hc.data_inicio_faturamento >= '2019-01-01'
+        AND ge.codi_emp NOT IN (9997, 9998, 9999, 10000, 10001)  -- Excluir empresas modelo
         ORDER BY hc.codi_emp, hc.i_contrato
         """
         
@@ -132,6 +138,23 @@ class Command(BaseETLCommand):
                 if hasattr(cliente_obj, 'cnpj'):
                     if not PessoaJuridica.objects.filter(cnpj=documento_limpo).exists():
                         total_pj_criadas += 1
+                    else:
+                        # Atualizar campos da PJ existente
+                        pj_existente = PessoaJuridica.objects.get(cnpj=documento_limpo)
+                        simples_emp = item.get('simples_emp')
+                        regime_tributario = None
+                        if simples_emp == 1:
+                            regime_tributario = '1'  # Simples Nacional
+                        elif simples_emp == 0:
+                            regime_tributario = '2'  # Lucro Presumido
+                        
+                        pj_existente.regime_tributario = regime_tributario
+                        pj_existente.simples_nacional = bool(simples_emp == 1)
+                        if item.get('rleg_emp'):
+                            pj_existente.responsavel_legal = str(item.get('rleg_emp')).strip()
+                        if item.get('cpf_responsavel'):
+                            pj_existente.cpf_responsavel = str(item.get('cpf_responsavel')).strip()
+                        pj_existente.save()
                 elif hasattr(cliente_obj, 'cpf'):
                     if not PessoaFisica.objects.filter(cpf=documento_limpo).exists():
                         total_pf_criadas += 1
@@ -192,6 +215,14 @@ class Command(BaseETLCommand):
         """Busca ou cria pessoa baseada no documento"""
         if len(documento_limpo) == 14:
             # Pessoa Jurídica
+            # Determinar regime tributário baseado no simples_emp
+            simples_emp = item.get('simples_emp')
+            regime_tributario = None
+            if simples_emp == 1:
+                regime_tributario = '1'  # Simples Nacional
+            elif simples_emp == 0:
+                regime_tributario = '2'  # Lucro Presumido (assumindo)
+            
             pj, created = PessoaJuridica.objects.get_or_create(
                 cnpj=documento_limpo,
                 defaults={
@@ -200,6 +231,14 @@ class Command(BaseETLCommand):
                     'nome_fantasia': str(item.get('fantasia_emp') or '').strip(),
                 }
             )
+            
+            # Sempre atualizar os campos de regime tributário
+            pj.regime_tributario = regime_tributario
+            pj.simples_nacional = bool(simples_emp == 1)
+            if item.get('rleg_emp'):
+                pj.responsavel_legal = str(item.get('rleg_emp')).strip()
+            pj.save()
+            
             return pj
         
         elif len(documento_limpo) == 11:

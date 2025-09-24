@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db import transaction
 from tqdm import tqdm
 from ._base import BaseETLCommand
-from funcionarios.models import VinculoEmpregaticio, Rescisao
+from apps.funcionarios.models import VinculoEmpregaticio, Rescisao
 
 class Command(BaseETLCommand):
     help = 'ETL para importar os dados principais de Rescisões do Sybase.'

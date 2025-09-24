@@ -17,8 +17,8 @@ from decimal import Decimal
 import random
 import time
 
-from importacao.management.commands._base import BaseETLCommand
-from administracao.models import Usuario, UsuarioContabilidade, UsuarioModulo
+from apps.importacao.management.commands._base import BaseETLCommand
+from apps.administracao.models import Usuario, UsuarioContabilidade, UsuarioModulo
 
 
 class Command(BaseETLCommand):

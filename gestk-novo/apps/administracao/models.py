@@ -6,8 +6,8 @@ ETLs 18, 19 e 20 - Usuários, Logs e Lançamentos
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from core.models import Contabilidade
-from pessoas.models import PessoaJuridica, PessoaFisica
+from apps.core.models import Contabilidade
+from apps.pessoas.models import PessoaJuridica, PessoaFisica
 import uuid
 
 

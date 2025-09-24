@@ -1,7 +1,7 @@
 from django.db import transaction
 from tqdm import tqdm
 from ._base import BaseETLCommand
-from funcionarios.models import Rescisao, Rubrica, RescisaoRubrica
+from apps.funcionarios.models import Rescisao, Rubrica, RescisaoRubrica
 from decimal import Decimal
 
 class Command(BaseETLCommand):

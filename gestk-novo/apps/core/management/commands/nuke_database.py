@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db import connection, transaction
-from contabil.models import Partida, LancamentoContabil
+from apps.contabil.models import Partida, LancamentoContabil
 import warnings
 
 class Command(BaseCommand):

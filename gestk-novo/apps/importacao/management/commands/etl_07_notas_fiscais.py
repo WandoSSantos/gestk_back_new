@@ -1,8 +1,8 @@
 from django.db import transaction
 from ._base import BaseETLCommand
-from core.models import Contabilidade
-from pessoas.models import PessoaJuridica, PessoaFisica, Contrato
-from fiscal.models import NotaFiscal, NotaFiscalItem
+from apps.core.models import Contabilidade
+from apps.pessoas.models import PessoaJuridica, PessoaFisica, Contrato
+from apps.fiscal.models import NotaFiscal, NotaFiscalItem
 from itertools import islice
 import re
 from decimal import Decimal

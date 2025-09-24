@@ -6,8 +6,8 @@ Importação de atividades, importações e lançamentos por usuário
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from core.models import Contabilidade
-from pessoas.models import PessoaJuridica, PessoaFisica
+from apps.core.models import Contabilidade
+from apps.pessoas.models import PessoaJuridica, PessoaFisica
 import uuid
 
 

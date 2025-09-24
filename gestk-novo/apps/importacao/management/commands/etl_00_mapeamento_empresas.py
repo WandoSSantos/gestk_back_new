@@ -21,9 +21,9 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.contrib.contenttypes.models import ContentType
 
-from importacao.management.commands._base import BaseETLCommand
-from pessoas.models import PessoaJuridica, PessoaFisica, Contrato
-from core.models import Contabilidade
+from apps.importacao.management.commands._base import BaseETLCommand
+from apps.pessoas.models import PessoaJuridica, PessoaFisica, Contrato
+from apps.core.models import Contabilidade
 
 
 class Command(BaseETLCommand):

@@ -2,7 +2,7 @@ import re
 from django.db import transaction
 from tqdm import tqdm
 from ._base import BaseETLCommand
-from funcionarios.models import Cargo, VinculoEmpregaticio, HistoricoSalario, HistoricoCargo
+from apps.funcionarios.models import Cargo, VinculoEmpregaticio, HistoricoSalario, HistoricoCargo
 
 class Command(BaseETLCommand):
     help = 'ETL para importar Históricos de Salário e Cargo do Sybase, com regras de negócio.'

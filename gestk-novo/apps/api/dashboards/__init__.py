@@ -1,1 +1,1 @@
-# Módulo de Dashboards
+# Módulo de Dashboards da API REST

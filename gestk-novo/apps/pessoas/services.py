@@ -1,5 +1,5 @@
 from .models import PessoaFisica, PessoaJuridica, Contrato
-from core.models import Contabilidade
+from apps.core.models import Contabilidade
 from django.contrib.contenttypes.models import ContentType
 import re
 
