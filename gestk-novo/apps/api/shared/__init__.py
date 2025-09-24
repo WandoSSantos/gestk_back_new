@@ -1,0 +1,1 @@
+# Módulo Compartilhado da API

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'fiscal.apps.FiscalConfig',                      # 6º - Documentos Fiscais (Notas)
     'funcionarios.apps.FuncionariosConfig',          # 7º - RH Completo
     'importacao.apps.ImportacaoConfig',              # 8º - Sistema de ETL
+    'administracao.apps.AdministracaoConfig',        # 9º - Administração (Usuários, Permissões)
 ]
 
 MIDDLEWARE = [
